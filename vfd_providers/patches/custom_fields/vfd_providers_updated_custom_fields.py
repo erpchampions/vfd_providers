@@ -84,13 +84,12 @@ def execute():
             {
                 "fieldname": "vfd_verification_url",
                 "label": "VFD Verification URL",
-                "fieldtype": "Data",
+                "fieldtype": "Small Text",
                 "insert_after": "vfd_posting_info",
                 "allow_on_submit": 1,
                 "read_only": 1,
                 "no_copy": 1,
                 "translatable": 1,
-                "length": "1000",
             },
             {
                 "fieldname": "vfd_dc",
