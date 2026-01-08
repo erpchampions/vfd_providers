@@ -123,7 +123,36 @@ def posting_all_vfd_invoices():
     frappe.local.flags.vfd_posting = False
 
 
+# def clean_and_update_tax_id_info(doc, method):
+#     cleaned_tax_id = "".join(char for char in (doc.tax_id or "") if char.isdigit())
+#     doc.tax_id = cleaned_tax_id
+#     if doc.tax_id:
+#         doc.vfd_cust_id_type = "1- TIN"
+#         doc.vfd_cust_id = doc.tax_id
+#     else:
+#         doc.vfd_cust_id_type = "6- Other"
+#         doc.vfd_cust_id = "999999999"
+
+# update customer information for Tanzania Territory
 def clean_and_update_tax_id_info(doc, method):
+    """
+    Clean and update tax_id info for VFD compliance.
+    ONLY processes customers where territory is Tanzania or parent is Tanzania.
+    """
+    territory = doc.get("territory")
+    if not territory:
+        return
+    
+    # Check: territory is Tanzania OR parent territory is Tanzania
+    is_tz = (territory == "Tanzania")
+    if not is_tz:
+        parent = frappe.db.get_value("Territory", territory, "parent_territory")
+        is_tz = (parent == "Tanzania")
+    
+    if not is_tz:
+        return
+    
+    # Original logic - only for TZ customers
     cleaned_tax_id = "".join(char for char in (doc.tax_id or "") if char.isdigit())
     doc.tax_id = cleaned_tax_id
     if doc.tax_id:

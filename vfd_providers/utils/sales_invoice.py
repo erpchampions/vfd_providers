@@ -14,8 +14,20 @@ import re
 
 
 def vfd_validation(doc, method):
+    """
+    Validate Sales Invoice for VFD compliance.
+    ONLY runs for companies with VFD Provider configured.
+    """
     if doc.is_return or doc.is_not_vfd_invoice:
         return
+    
+    # ============================================
+    # MULTI-COMPANY SAFETY: Early exit if no VFD
+    # ============================================
+    if not frappe.db.exists("Company VFD Provider", {"company": doc.company}):
+        return
+    # ============================================
+    
     if doc.base_net_total == 0:
         frappe.throw(_("Base net amount is zero. Correct the invoice and retry."))
 
