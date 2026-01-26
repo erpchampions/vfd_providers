@@ -119,6 +119,7 @@ doc_events = {
         "on_submit": "vfd_providers.utils.utils.autogenerate_vfd",
         "before_cancel": "vfd_providers.utils.sales_invoice.validate_cancel",
         "before_submit": "vfd_providers.utils.sales_invoice.vfd_validation",
+        "validate": "vfd_providers.utils.sales_invoice.validate_items_have_tax_template",
     },
     "Customer": {
         "validate": "vfd_providers.utils.utils.clean_and_update_tax_id_info",

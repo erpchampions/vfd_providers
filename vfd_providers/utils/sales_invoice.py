@@ -248,3 +248,17 @@ def remove_all_except_numbers(text=None):
     if not text:
         return ""
     return re.sub("[^0-9]+", "", text)
+
+def validate_items_have_tax_template(doc, method):
+    """
+    Validate that all items in the Sales Invoice have an Item Tax Template assigned.
+    """
+    if doc.is_return or not doc.company == 'MOGAS Tanzania':
+        return
+    for item in doc.items:
+        if not item.item_tax_template:
+            frappe.throw(
+                _("Item Tax Template not set for item {0} in Sales Invoice {1}").format(
+                    item.item_code, doc.name
+                )
+            )       
