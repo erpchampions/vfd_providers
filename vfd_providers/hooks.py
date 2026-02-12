@@ -202,3 +202,37 @@ scheduler_events = {
 # auth_hooks = [
 # 	"vfd_providers.auth.validate"
 # ]
+
+fixtures = [
+    
+    {
+        "doctype": "Print Format",
+        "filters": {
+            "name": ["in", ["TRA Invoice"]]
+        }
+    },
+    {
+        "doctype": "Company VFD Provider",
+        "filters": {
+            "name": ["in", ["MOGAS Tanzania - VFD Provider"]]
+        }
+    },
+    {
+        "doctype": "VFD Provider",
+        "filters": {
+            "name": ["in", ["VFDPlus", "TotalVFD", "SimplifyVFD"]]
+        }
+    },
+    {
+        "doctype": "Client Script",
+        "filters": {
+            "module": ["in", ["VFD Providers"]]
+        }
+    },
+    {
+        "doctype": "Server Script",
+        "filters": {
+            "module": ["in", ["VFD Providers"]]
+        }
+    }
+]

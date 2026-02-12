@@ -18,6 +18,8 @@ def vfd_validation(doc, method):
     Validate Sales Invoice for VFD compliance.
     ONLY runs for companies with VFD Provider configured.
     """
+    if not doc.company == 'MOGAS Tanzania':
+        return
     if doc.is_return or doc.is_not_vfd_invoice:
         return
     

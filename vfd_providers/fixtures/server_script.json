@@ -1,0 +1,21 @@
+[
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 1,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Validate",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2026-02-12 15:33:08.588953",
+  "module": "VFD Providers",
+  "name": "Warn on Extra Row in taxes and Charges table",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": "Sales Invoice",
+  "script": "# Ensure only one row exists in taxes_and_charges table\nif len(doc.taxes) > 1:\n    frappe.throw(\"Sales Invoice can only have one Tax and Charge row.\")\n",
+  "script_type": "DocType Event"
+ }
+]

@@ -66,6 +66,8 @@ def generate_tra_vfd(docname, sinv_doc=None, method="POST", caller="Frontend"):
 
 
 def autogenerate_vfd(doc, method):
+    if not doc.company == 'MOGAS Tanzania':
+        return
     if doc.is_not_vfd_invoice or doc.vfd_status == "Success" or doc.is_return == 1:
         return
     

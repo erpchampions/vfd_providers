@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Sales Invoice",
+  "enabled": 1,
+  "modified": "2026-02-12 15:55:26.435834",
+  "module": "VFD Providers",
+  "name": "Reset taxes and charges table to a Single Row",
+  "script": "frappe.ui.form.on(\"Sales Invoice\", {\n    taxes_add(frm) {\n        enforce_single_tax_row(frm);\n    },\n    validate(frm) {\n        enforce_single_tax_row(frm);\n    }\n});\n\nfunction enforce_single_tax_row(frm) {\n    let taxes = frm.doc.taxes || [];\n\n    if (taxes.length > 1) {\n        // Keep the first row, remove the rest\n        let rows_to_remove = taxes.slice(1);\n\n        rows_to_remove.forEach(row => {\n            frm.get_field(\"taxes\").grid.grid_rows_by_docname[row.name].remove();\n        });\n\n        frappe.msgprint(\"Only one Tax and Charge row is allowed. Extra rows were removed.\");\n    }\n}\n\n",
+  "view": "Form"
+ }
+]

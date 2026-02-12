@@ -32,6 +32,9 @@ frappe.ui.form.on("Sales Invoice", {
 });
 
 function _generate_vfd(frm) {
+  if(frm.doc.company != 'MOGAS Tanzania') {    
+    return;
+  }
   frappe.call({
     method: "vfd_providers.utils.utils.generate_tra_vfd",
     args: {
