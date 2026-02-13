@@ -4,31 +4,26 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 def execute():
     fields = {
-        "Customer": [
-            {
-                "fieldname": "vfd_details",
-                "label": "VFD Details",
-                "fieldtype": "Section Break",
-                "no_copy": 1,
-                "insert_after": "tax_withholding_category",
-            },
+        "Customer": [            
             {
                 "fieldname": "vfd_cust_id",
                 "label": "VFD Customer ID",
                 "fieldtype": "Data",
-                "insert_after": "vfd_details",
-                "reqd": 1,
+                "insert_after": "tax_withholding_category",
+                "reqd": 0,
                 "no_copy": 1,
                 "translatable": 1,
+                "mandatory_depends_on":"eval:doc.custom_company == 'MOGAS Tanzania'"
             },
             {
                 "fieldname": "vfd_cust_id_type",
                 "label": "VFD Customer ID Type",
                 "fieldtype": "Select",
                 "insert_after": "vfd_cust_id",
-                "reqd": 1,
+                "reqd": 0,
                 "no_copy": 1,
                 "translatable": 1,
+                "mandatory_depends_on":"eval:doc.custom_company == 'MOGAS Tanzania'",
                 "options": "\n1- TIN\n2- Passport\n3- Driving License\n4- Voter ID\n5- Aadhaar\n6- Other",
             },
         ],
