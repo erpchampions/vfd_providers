@@ -159,6 +159,8 @@ def get_item_taxcode(item_tax_template=None, item_code=None, invoice_name=None):
 
 
 def validate_cancel(doc, method):
+    if not doc.company == 'MOGAS Tanzania' and ( doc.is_return or doc.is_not_vfd_invoice):
+        return
     if doc.vfd_rctvnum:
         frappe.throw(
             _(
