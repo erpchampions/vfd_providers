@@ -33,10 +33,10 @@ def execute():
                 "label": "Generate VFD",
                 "fieldtype": "Button",
                 "insert_after": "due_date",
-                "depends_on": "eval: doc.docstatus == 1 &&\
-                    doc.is_not_vfd_invoice == 0 && \
-                    doc.vfd_status != 'Success' && \
-                    doc.is_return == 0",
+                "depends_on": "eval: doc.docstatus == 1 && \
+                (!doc.is_not_vfd_invoice || doc.is_not_vfd_invoice == 0) && \
+                doc.vfd_status != 'Success' && \
+                doc.is_return == 0",
                 "allow_on_submit": 1,
             },
             {
