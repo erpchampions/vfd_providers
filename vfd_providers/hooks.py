@@ -220,7 +220,7 @@ fixtures = [
     {
         "doctype": "VFD Provider",
         "filters": {
-            "name": ["in", ["VFDPlus", "TotalVFD", "SimplifyVFD"]]
+            "name": ["in", ["VFDPlus", "SimplifyVFD"]]
         }
     },
     {

@@ -42,64 +42,94 @@ def vfd_validation(doc, method):
         frappe.throw(_("Taxes not set correctly"))
 
     for item in doc.items:
-        if not item.item_code:
-            frappe.throw(_("Item Code not set for item {0}".format(item.item_name)))
-        if not item.item_tax_template:
-            item_tax_template = frappe.get_value(
-                "Item", item.item_code, "default_tax_template"
-            )
-            if not item_tax_template:
-                frappe.throw(
-                    _("Item Taxes Template not set for item {0}".format(item.item_code))
-                )
-            else:
-                item.item_tax_template = item_tax_template
-        item_taxcode = get_item_taxcode(
-            item.item_tax_template, item.item_code, doc.name
-        )
-
         with_tax = 0
-        other_tax = 0
 
-        for tax_name, tax_value in tax_data.get(item.item_code).items():
-            if tax_value.get("tax_rate") == 18:
-                with_tax += 1
-            else:
-                other_tax += tax_value.get("tax_amount")
+        item_tax_map = tax_data.get(item.item_code, {})   
+        item_taxcode = ""    
 
-        if other_tax:
-            frappe.throw(
-                _(
-                    "Taxes not set correctly for Other Tax item {0}".format(
-                        item.item_code
-                    )
+        item_tax_rates = json.loads(item.item_tax_rate or "{}")
+
+        for account_head, rate in item_tax_rates.items():
+            if "VAT" in account_head:
+                if rate == 18:
+                    with_tax += 1
+                    item_taxcode = get_item_taxcode(
+                    item.item_tax_template, item.item_code, doc.name
                 )
-            )
+
+            # # Only validate VAT
+            # if "VAT" in (account_head or ""):
+            #     if tax_value.get("tax_rate") == 18:
+            #         with_tax += 1
+
         if item_taxcode == 1 and with_tax != 1:
-            if vfdplus_settings and vfdplus_settings.vat_enabled:
-                frappe.msgprint(
-                    _(
-                        "Taxes is not set to 18pct for Standard Rate item {0}".format(
-                            item.item_code
-                        )
-                    )
-                )
-            else:
-                frappe.throw(
-                    _(
-                        "Taxes not set correctly for Standard Rate item {0}".format(
-                            item.item_code
-                        )
-                    )
-                )
+            frappe.throw(
+                _("Taxes not set correctly for Standard Rate item {0}".format(item.item_code))
+            )
+
         elif item_taxcode != 1 and with_tax != 0:
             frappe.throw(
-                _(
-                    "Taxes not set correctly for Non Standard Rate item {0}".format(
-                        item.item_code
-                    )
-                )
+                _("Taxes not set correctly for Non Standard Rate item {0}".format(item.item_code))
             )
+    # for item in doc.items:
+    #     if not item.item_code:
+    #         frappe.throw(_("Item Code not set for item {0}".format(item.item_name)))
+    #     if not item.item_tax_template:
+    #         item_tax_template = frappe.get_value(
+    #             "Item", item.item_code, "default_tax_template"
+    #         )
+    #         if not item_tax_template:
+    #             frappe.throw(
+    #                 _("Item Taxes Template not set for item {0}".format(item.item_code))
+    #             )
+    #         else:
+    #             item.item_tax_template = item_tax_template
+    #     item_taxcode = get_item_taxcode(
+    #         item.item_tax_template, item.item_code, doc.name
+    #     )
+
+    #     with_tax = 0
+    #     other_tax = 0
+
+    #     for tax_name, tax_value in tax_data.get(item.item_code).items():
+    #         if tax_value.get("tax_rate") == 18:#Check account head for item_tax_template and not tax_value.get("tax_amount"):
+    #             with_tax += 1
+    #         else:
+    #             other_tax += tax_value.get("tax_amount")
+
+    #     if other_tax:
+    #         frappe.throw(
+    #             _(
+    #                 "Taxes not set correctly for Other Tax item {0}".format(
+    #                     item.item_code
+    #                 )
+    #             )
+    #         )
+    #     if item_taxcode == 1 and with_tax != 1:
+    #         if vfdplus_settings and vfdplus_settings.vat_enabled:
+    #             frappe.msgprint(
+    #                 _(
+    #                     "Taxes is not set to 18pct for Standard Rate item {0}".format(
+    #                         item.item_code
+    #                     )
+    #                 )
+    #             )
+    #         else:
+    #             frappe.throw(
+    #                 _(
+    #                     "Taxes not set correctly for Standard Rate item {0}".format(
+    #                         item.item_code
+    #                     )
+    #                 )
+    #             )
+    #     elif item_taxcode != 1 and with_tax != 0:
+    #         frappe.throw(
+    #             _(
+    #                 "Taxes not set correctly for Non Standard Rate item {0}".format(
+    #                     item.item_code
+    #                 )
+    #             )
+    #         )
 
     if not doc.vfd_cust_id_type or not doc.vfd_cust_id:
         data = get_customer_id_info(doc.customer)
