@@ -1,3 +1,6 @@
+// Fix for vfd_providers/utils/customer.js
+// Replace entire file with this version
+
 frappe.ui.form.on("Customer", {
     refresh: function(frm) {
         check_vfd_territory(frm);
